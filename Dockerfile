@@ -30,3 +30,7 @@ RUN superset db upgrade
 
 # Create default roles and permissions
 RUN superset init
+
+COPY ./config.py /usr/local/lib/python3.6/dist-packages/superset/
+COPY ./couture-logo.png /usr/local/lib/python3.6/dist-packages/superset/static/assets/images/
+COPY ./favicon.png /usr/local/lib/python3.6/dist-packages/superset/static/assets/images/
