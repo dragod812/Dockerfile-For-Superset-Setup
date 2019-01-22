@@ -31,6 +31,12 @@ RUN superset db upgrade
 # Create default roles and permissions
 RUN superset init
 
+#to change app_name and app_logo
 COPY ./config.py /usr/local/lib/python3.6/dist-packages/superset/
+#copying logo and favicon
 COPY ./couture-logo.png /usr/local/lib/python3.6/dist-packages/superset/static/assets/images/
 COPY ./favicon.png /usr/local/lib/python3.6/dist-packages/superset/static/assets/images/
+#changing the default redirect
+COPY ./__init__.py /usr/local/lib/python3.6/dist-packages/superset/
+#changing the target of onclick on logo
+COPY ./navbar.html /usr/local/lib/python3.6/dist-packages/superset/templates/appbuilder/
