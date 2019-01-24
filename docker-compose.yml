@@ -29,6 +29,7 @@ services:
       - mysql:/var/lib/mysql
   superset:
     build: .
+    image: couture-dashboard:latest
     restart: unless-stopped
     env_file: 
       - ./list.env
@@ -53,4 +54,4 @@ volumes:
   mysql:
     external: false
   supersetdb:
-    external: false
+    external: true

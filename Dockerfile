@@ -28,6 +28,7 @@ RUN python3.6 -m pip install --upgrade setuptools pip wheel
 #------install python packages from requirements.txt------
 COPY ./requirements.txt /
 RUN python3.6 -m pip install -r  requirements.txt
+RUN rm -rf /requirements.txt
 
 #installing superset
 RUN python3.6 -m pip install superset
