@@ -26,7 +26,8 @@ RUN apt-get install python3.6-dev python3-pip python-dev -y
 RUN python3.6 -m pip install --upgrade setuptools pip wheel
 
 #------install python packages from requirements.txt------
-RUN python3.6 -m pip install -r requirements.txt
+COPY ./requirements.txt /
+RUN python3.6 -m pip install -r  requirements.txt
 
 #installing superset
 RUN python3.6 -m pip install superset
