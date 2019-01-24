@@ -1,0 +1,56 @@
+version: '3'
+services:
+  redis:
+    image: redis:3.2
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+  rabbitmq:
+    image: "rabbitmq:3.6.10"
+    restart: unless-stopped
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - rabbit:/var/lib/rabbitmq
+  mysql:
+    image: mysql:5
+    restart: unless-stopped 
+    environment:
+      MYSQL_ROOT_PASSWORD: password 
+      MYSQL_DATABASE: mysql_database 
+      MYSQL_USER: user 
+      MYSQL_PASSWORD: password 
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql:/var/lib/mysql
+  superset:
+    build: .
+    restart: unless-stopped
+    env_file: 
+      - ./list.env
+    ports:
+      - 8088:8088
+    container_name: couture-dashboard
+    # depends_on:
+    #   - mysql 
+    #   - redis
+    volumes:
+      - supersetdb:/home/couture/.superset/
+      # this is needed to communicate with the mysql and redis services
+      # - ./superset_config.py:/home/superset/superset/superset_config.py
+      # this is needed for development, remove with SUPERSET_ENV=production
+      # - ../../superset:/home/superset/superset
+
+volumes:
+  redis:
+    external: false
+  rabbit:
+    external: false
+  mysql:
+    external: false
+  supersetdb:
+    external: false
