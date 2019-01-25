@@ -3,7 +3,7 @@ FROM ubuntu:16.04
 #-------------setting environment variables-------------
 ENV LC_ALL=C.UTF-8 \
     LANG=C.UTF-8 \
-    SUPERSET_HOME=/usr/local/lib/python3.6/dist-packages/superset \
+    SUPERSET_DIR=/usr/local/lib/python3.6/dist-packages/superset \
     SUPERSET_DB=/home/couture/.superset \
     SUPERSET_USERNAME=heimdall \
     SUPERSET_PASSWORD=couture@1234 \
@@ -35,7 +35,7 @@ RUN python3.6 -m pip install superset
 
 #-------------New user creation and ownership-------------
 RUN useradd -U -m couture && \
-    chown -R couture:couture ${SUPERSET_HOME} 
+    chown -R couture:couture ${SUPERSET_DIR} ${SUPERSET_DB}
 USER couture:couture
 
 #---------------Application specific changes---------------
@@ -54,14 +54,14 @@ RUN superset db upgrade
 RUN superset init
 
 #to change app_name and app_logo
-COPY ./config.py ${SUPERSET_HOME}/
+COPY ./config.py ${SUPERSET_DIR}/
 #copying logo and favicon
-COPY ./couture-logo.png ${SUPERSET_HOME}/static/assets/images/
-COPY ./favicon.png ${SUPERSET_HOME}/static/assets/images/
+COPY ./couture-logo.png ${SUPERSET_DIR}/static/assets/images/
+COPY ./favicon.png ${SUPERSET_DIR}/static/assets/images/
 #changing the default redirect
-COPY ./__init__.py ${SUPERSET_HOME}/
+COPY ./__init__.py ${SUPERSET_DIR}/
 #changing the target of onclick on logo
-COPY ./navbar.html ${SUPERSET_HOME}/templates/appbuilder/
+COPY ./navbar.html ${SUPERSET_DIR}/templates/appbuilder/
 
 # VOLUME ["supersetdb:/root/.superset/"]
 
@@ -70,4 +70,4 @@ EXPOSE 8088
 
 #-----------------Run Superset Application-----------------
 CMD ["superset", "runserver", "-d"]
-#docker run --name CONTAINER-NAME -tid -p 8088:8088 -v supersetdb:/home/couture/.superset image:tag
+#docker run --name CONTAINER-NAME-tid -p 8088:8088 -v supersetdb:/home/couture/.superset image:tag
